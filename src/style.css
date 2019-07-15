@@ -1,0 +1,43 @@
+.image-wrapper {
+  width: 40%;
+  margin: auto;
+  user-select: none;
+}
+
+.image {
+  width: 100%
+}
+
+.tag:hover {
+  cursor: default;
+  user-select: none;
+}
+
+.tag {
+  position: absolute;
+}
+
+h6 {
+  margin: auto;
+}
+
+.close {
+  color: red;
+  font-weight: bolder;
+  float: right;
+  font-size: 25px;
+}
+
+.close:hover {
+  cursor: pointer;
+}
+
+.input-wrapper{
+  width: 170px;
+  position: absolute;
+}
+
+.tag-input {
+  width: 90%;
+  float: left
+}
