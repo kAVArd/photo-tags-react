@@ -7,19 +7,24 @@ const InputWrapper = (props) => {
     visibility: props.visibility
   }
 
-  return (
-    <div className='input-wrapper' style={styleWrapper}>
-      <input 
-        type='text' 
-        size='15' 
-        className='form-control tag-input' 
-        placeholder='Enter tag text'
-        onChange={props.onChange} 
-        value={props.inputValue}
-      />
-      <span className="close">&times;</span>
-    </div>
-  )
+  if (props.visibility === 'visible') {
+    return (
+      <div className='input-wrapper' style={styleWrapper}>
+        <input
+          type='text'
+          size='15'
+          className='form-control tag-input'
+          placeholder='Enter tag text'
+          onChange={props.changeInputValue}
+          value={props.inputValue}
+          autoFocus
+        />
+        <span className='close' onClick={props.deleteTag}>&times;</span>
+
+      </div>
+    )
+  }
+  return null
 }
 
 export default InputWrapper
