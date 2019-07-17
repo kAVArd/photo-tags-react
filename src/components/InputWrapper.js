@@ -1,9 +1,9 @@
 import React, { useEffect, useRef } from 'react'
 
-const InputWrapper = (props) => {
+const InputWrapper = ({ enterPress, deleteTag, changeValue, value, position }) => {
   const styleWrapper = {
-    left: props.position.x + 'px',
-    top: props.position.y + 'px'
+    left: position.x + 'px',
+    top: position.y + 'px'
   }
 
   const input = useRef(null)
@@ -13,14 +13,14 @@ const InputWrapper = (props) => {
     const inputCurrent = input.current
     const closeButtonCurrent = closeButton.current
 
-    inputCurrent.addEventListener('keypress', props.enterPress)
-    closeButtonCurrent.addEventListener('click', props.deleteTag)
+    inputCurrent.addEventListener('keypress', enterPress)
+    closeButtonCurrent.addEventListener('click', deleteTag)
 
     return () => {
-      inputCurrent.removeEventListener('keypress', props.enterPress)
-      closeButtonCurrent.removeEventListener('click', props.deleteTag)
+      inputCurrent.removeEventListener('keypress', enterPress)
+      closeButtonCurrent.removeEventListener('click', deleteTag)
     }
-  }, [])
+  }, [enterPress, deleteTag])
 
   return (
     <div className='input-wrapper' style={styleWrapper}>
@@ -30,8 +30,8 @@ const InputWrapper = (props) => {
         className='form-control tag-input'
         placeholder='Enter tag text'
         ref={input}
-        onChange={props.changeValue}
-        value={props.value}
+        onChange={changeValue}
+        value={value}
         autoFocus
       />
       <span className='close' ref={closeButton}>&times;</span>

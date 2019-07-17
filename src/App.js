@@ -88,7 +88,7 @@ const App = () => {
     } else setTagsArray([...tagsArray, { text: inputValue, position: position, isEditing: false }])
 
     setInputDefault()
-  }, [inputVisibility, inputValue, editingIndex, tagsArray])
+  }, [inputVisibility, inputValue, editingIndex, tagsArray, position])
 
   const enterPress = (e) => {
     if (e.which === 13) handleClick()
@@ -98,9 +98,7 @@ const App = () => {
 
   useEffect(() => {
     const containerCurrent = container.current
-    containerCurrent.addEventListener('click', (e) => {
-      handleClick(e)
-    })
+    containerCurrent.addEventListener('click', handleClick)
     return () => {
       containerCurrent.removeEventListener('click', handleClick)
     }

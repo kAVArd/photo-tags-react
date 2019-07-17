@@ -9,7 +9,7 @@ const ImageWrapper = ({ moveTag }) => {
     return () => {
       imageWrapperCurrent.removeEventListener('mousemove', moveTag)
     }
-  })
+  }, [moveTag])
 
   return (
     <div className='image-wrapper' ref={imageWrapper}>
