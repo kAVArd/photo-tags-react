@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState } from 'react'
 import update from 'immutability-helper'
 import './style.css'
 import ImageWrapper from './components/ImageWrapper'
@@ -70,14 +70,11 @@ const App = () => {
   }
 
   const handleClick = (e) => {
-    console.log('handeClick')
-    console.log(inputValue)
     if (e && e.target.className === 'image' && inputVisibility === 'hidden') {
       displayInput(e.clientX - 85, e.clientY - 19)
     }
 
     if (inputValue === '') {
-      console.log('jopa')
       return
     }
 
@@ -92,19 +89,11 @@ const App = () => {
   }
 
   const enterPress = (e) => {
-    if (e.keyCode === 13) handleClick()
+    if (e.which === 13) handleClick()
   }
 
-  const container = useRef(null)
-
-  useEffect(() => {
-    const containerCurrent = container.current
-    containerCurrent.addEventListener('click', handleClick)
-    return () => containerCurrent.removeEventListener('click', handleClick)
-  })
-
   return (
-    <div ref={container}>
+    <div onClick={handleClick}>
       <ImageWrapper moveTag={moveTag} />
       {inputVisibility === 'visible' && <InputWrapper
         position={position}
