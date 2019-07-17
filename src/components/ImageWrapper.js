@@ -1,13 +1,13 @@
 import React, { useRef, useEffect } from 'react'
 
-const ImageWrapper = (props) => {
+const ImageWrapper = ({ moveTag }) => {
   const imageWrapper = useRef(null)
 
   useEffect(() => {
     const imageWrapperCurrent = imageWrapper.current
-    imageWrapperCurrent.addEventListener('mousemove', props.moveTag)
+    imageWrapperCurrent.addEventListener('mousemove', moveTag)
     return () => {
-      imageWrapperCurrent.removeEventListener('mousemove', props.moveTag)
+      imageWrapperCurrent.removeEventListener('mousemove', moveTag)
     }
   })
 

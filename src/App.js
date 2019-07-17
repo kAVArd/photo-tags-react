@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState, useRef, useEffect, useCallback } from 'react'
 import update from 'immutability-helper'
 import './style.css'
 import ImageWrapper from './components/ImageWrapper'
@@ -18,6 +18,7 @@ const App = () => {
   }
 
   const selectTag = (e) => {
+    console.log(tagsArray)
     const tag = e.target.parentElement
     setDrugObject({
       index: tag.id,
@@ -29,6 +30,7 @@ const App = () => {
   }
 
   const unselectTag = function () {
+    console.log(tagsArray)
     setDrugObject(null)
   }
 
@@ -69,7 +71,7 @@ const App = () => {
     setInputDefault()
   }
 
-  const handleClick = (e) => {
+  const handleClick = useCallback((e) => {
     if (e && e.target.className === 'image' && inputVisibility === 'hidden') {
       displayInput(e.clientX - 85, e.clientY - 19)
     }
@@ -86,19 +88,23 @@ const App = () => {
     } else setTagsArray([...tagsArray, { text: inputValue, position: position, isEditing: false }])
 
     setInputDefault()
-  }
+  }, [inputVisibility, inputValue, editingIndex, tagsArray])
 
   const enterPress = (e) => {
     if (e.which === 13) handleClick()
   }
 
-  const container = useRef(null)
+  const container = useRef()
 
   useEffect(() => {
     const containerCurrent = container.current
-    containerCurrent.addEventListener('click', handleClick)
-    return () => containerCurrent.removeEventListener('click', handleClick)
-  }, [])
+    containerCurrent.addEventListener('click', (e) => {
+      handleClick(e)
+    })
+    return () => {
+      containerCurrent.removeEventListener('click', handleClick)
+    }
+  }, [handleClick])
 
   return (
     <div ref={container}>
@@ -111,7 +117,6 @@ const App = () => {
         enterPress={enterPress}
       />}
       <TagsWrapper tags={tagsArray} selectTag={selectTag} unselectTag={unselectTag} startEditTag={startEditTag} />
-      {inputValue}
     </div>
   )
 }
