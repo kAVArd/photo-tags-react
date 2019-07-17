@@ -1,30 +1,41 @@
-import React from 'react'
+import React, { useEffect, useRef } from 'react'
 
 const InputWrapper = (props) => {
   const styleWrapper = {
-    left: props.position.x,
-    top: props.position.y,
-    visibility: props.visibility
+    left: props.position.x + 'px',
+    top: props.position.y + 'px'
   }
 
-  if (props.visibility === 'visible') {
-    return (
-      <div className='input-wrapper' style={styleWrapper}>
-        <input
-          type='text'
-          size='15'
-          className='form-control tag-input'
-          placeholder='Enter tag text'
-          onChange={props.changeInputValue}
-          value={props.inputValue}
-          autoFocus
-        />
-        <span className='close' onClick={props.deleteTag}>&times;</span>
+  const input = useRef(null)
+  const closeButton = useRef(null)
 
-      </div>
-    )
-  }
-  return null
+  useEffect(() => {
+    const inputCurrent = input.current
+    const closeButtonCurrent = closeButton.current
+
+    inputCurrent.addEventListener('change', props.changeValue)
+    closeButtonCurrent.addEventListener('click', props.deleteTag)
+
+    return () => {
+      inputCurrent.removeEventListener('change', props.changeValue)
+      closeButtonCurrent.removeEventListener('click', props.deleteTag)
+    }
+  })
+
+  return (
+    <div className='input-wrapper' style={styleWrapper}>
+      <input
+        type='text'
+        size='15'
+        className='form-control tag-input'
+        placeholder='Enter tag text'
+        ref={input}
+        defaultValue={props.value}
+        autoFocus
+      />
+      <span className='close' ref={closeButton}>&times;</span>
+    </div>
+  )
 }
 
 export default InputWrapper
