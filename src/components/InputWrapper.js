@@ -13,14 +13,14 @@ const InputWrapper = (props) => {
     const inputCurrent = input.current
     const closeButtonCurrent = closeButton.current
 
-    inputCurrent.addEventListener('change', props.changeValue)
+    inputCurrent.addEventListener('keypress', props.enterPress)
     closeButtonCurrent.addEventListener('click', props.deleteTag)
 
     return () => {
-      inputCurrent.removeEventListener('change', props.changeValue)
+      inputCurrent.removeEventListener('keypress', props.enterPress)
       closeButtonCurrent.removeEventListener('click', props.deleteTag)
     }
-  }, [])
+  })
 
   return (
     <div className='input-wrapper' style={styleWrapper}>
@@ -30,7 +30,8 @@ const InputWrapper = (props) => {
         className='form-control tag-input'
         placeholder='Enter tag text'
         ref={input}
-        defaultValue={props.value}
+        value={props.value}
+        onChange={props.changeValue}
         autoFocus
       />
       <span className='close' ref={closeButton}>&times;</span>

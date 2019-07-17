@@ -13,7 +13,7 @@ const Tag = (props) => {
       tagCurrent.removeEventListener('mouseup', props.unselectTag)
       tagCurrent.removeEventListener('dblclick', props.startEditTag)
     }
-  }, [])
+  })
 
   return (
     <span

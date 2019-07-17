@@ -70,9 +70,16 @@ const App = () => {
   }
 
   const handleClick = (e) => {
-    if (e && e.target.className === 'image' && inputVisibility === 'hidden') displayInput(e.clientX - 85, e.clientY - 19)
+    console.log('handeClick')
+    console.log(inputValue)
+    if (e && e.target.className === 'image' && inputVisibility === 'hidden') {
+      displayInput(e.clientX - 85, e.clientY - 19)
+    }
 
-    if (inputValue === '') return
+    if (inputValue === '') {
+      console.log('jopa')
+      return
+    }
 
     if (editingIndex !== null) {
       setTagsArray(update(tagsArray, { [editingIndex]: {
@@ -82,6 +89,10 @@ const App = () => {
     } else setTagsArray([...tagsArray, { text: inputValue, position: position, isEditing: false }])
 
     setInputDefault()
+  }
+
+  const enterPress = (e) => {
+    if (e.keyCode === 13) handleClick()
   }
 
   const container = useRef(null)
@@ -100,6 +111,7 @@ const App = () => {
         changeValue={changeInputValue}
         value={inputValue}
         deleteTag={deleteTag}
+        enterPress={enterPress}
       />}
       <TagsWrapper tags={tagsArray} selectTag={selectTag} unselectTag={unselectTag} startEditTag={startEditTag} />
     </div>
