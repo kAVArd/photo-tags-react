@@ -12,13 +12,12 @@ const App = () => {
     setTagsArray(update(tagsArray, { [id]: { text: { $set: e.target.value } } }))
   }
 
-  const selectTag = (e) => {
-    const tag = e.target.parentElement
+  const selectTag = (id, width, height) => {
     setDrugObject({
-      index: tag.id,
+      index: id,
       offset: {
-        width: tag.offsetWidth,
-        height: tag.offsetHeight
+        width: width,
+        height: height
       }
     })
   }
@@ -58,7 +57,7 @@ const App = () => {
     setTagsArray(update(tagsArray, { [id]: { isEditing: { $set: true } } }))
   }
 
-  const enterPress = () => console.log('enterPress')
+  const enterPress = () => handleClick()
 
   const container = useRef()
 
@@ -70,7 +69,9 @@ const App = () => {
     }
   })
 
-  const deleteTag = () => console.log('deleteTag')
+  const deleteTag = (id) => {
+    setTagsArray(update(tagsArray, { $splice: [[id, 1]] }))
+  }
 
   return (
     <div ref={container}>

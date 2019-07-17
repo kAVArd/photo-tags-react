@@ -13,35 +13,45 @@ const InputWrapper = ({
     top: position.y + 'px'
   }
 
+  const close = useRef(null)
   const input = useRef(null)
-  const closeButton = useRef(null)
 
   useEffect(() => {
+    const closeCurrent = close.current
     const inputCurrent = input.current
-    const closeButtonCurrent = closeButton.current
 
-    inputCurrent.addEventListener('keypress', enterPress)
-    closeButtonCurrent.addEventListener('click', deleteTag)
+    closeCurrent.addEventListener('click', (e) => {
+      e.stopPropagation()
+      deleteTag(id)
+    })
+    inputCurrent.addEventListener('keypress', (e) => {
+      if (e.which === 13) enterPress()
+    })
 
     return () => {
-      inputCurrent.removeEventListener('keypress', enterPress)
-      closeButtonCurrent.removeEventListener('click', deleteTag)
+      closeCurrent.removeEventListener('click', (e) => {
+        e.stopPropagation()
+        deleteTag(id)
+      })
+      inputCurrent.removeEventListener('keypress', (e) => {
+        if (e.which === 13) enterPress()
+      })
     }
-  }, [enterPress, deleteTag])
+  })
 
   return (
     <div className='input-wrapper' style={styleWrapper}>
       <input
+        ref={input}
         type='text'
         size='15'
         className='form-control tag-input'
         placeholder='Enter tag text'
-        ref={input}
         onChange={(e) => changeText(id, e)}
         value={text}
         autoFocus
       />
-      <span className='close' ref={closeButton}>&times;</span>
+      <span className='close' ref={close}>&times;</span>
     </div>
   )
 }

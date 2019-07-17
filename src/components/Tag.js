@@ -25,7 +25,10 @@ const Tag = ({
   }
   return (
     <span
-      onMouseDown={selectTag}
+      onMouseDown={(e) => {
+        const tag = e.target.parentElement
+        selectTag(id, tag.offsetWidth, tag.offsetHeight)
+      }}
       onMouseUp={unselectTag}
       onDoubleClick={() => startEditTag(id)}
       className='tag badge badge-secondary'
