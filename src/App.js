@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState, useRef, useEffect, useCallback } from 'react'
 import update from 'immutability-helper'
 import './style.css'
 import ImageWrapper from './components/ImageWrapper'
@@ -35,7 +35,7 @@ const App = () => {
     }
   }
 
-  const handleClick = (e) => {
+  const handleClick = useCallback((e) => {
     if (e && e.target.className === 'image') {
       setTagsArray(update(tagsArray, { $push: [{
         text: '',
@@ -51,7 +51,7 @@ const App = () => {
       if (tag.text === '') setTagsArray(update(tagsArray, { $splice: [[index, 1]] }))
       else if (tag.isEditing) setTagsArray(update(tagsArray, { [index]: { isEditing: { $set: false } } }))
     })
-  }
+  }, [tagsArray])
 
   const startEditTag = (id) => {
     setTagsArray(update(tagsArray, { [id]: { isEditing: { $set: true } } }))
@@ -67,7 +67,7 @@ const App = () => {
     return () => {
       containerCurrent.removeEventListener('click', handleClick)
     }
-  })
+  }, [handleClick])
 
   const deleteTag = (id) => {
     setTagsArray(update(tagsArray, { $splice: [[id, 1]] }))
