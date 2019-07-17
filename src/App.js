@@ -70,14 +70,11 @@ const App = () => {
   }
 
   const handleClick = (e) => {
-    console.log('handeClick')
-    console.log(inputValue)
     if (e && e.target.className === 'image' && inputVisibility === 'hidden') {
       displayInput(e.clientX - 85, e.clientY - 19)
     }
 
     if (inputValue === '') {
-      console.log('jopa')
       return
     }
 
@@ -92,7 +89,7 @@ const App = () => {
   }
 
   const enterPress = (e) => {
-    if (e.keyCode === 13) handleClick()
+    if (e.which === 13) handleClick()
   }
 
   const container = useRef(null)
@@ -101,7 +98,7 @@ const App = () => {
     const containerCurrent = container.current
     containerCurrent.addEventListener('click', handleClick)
     return () => containerCurrent.removeEventListener('click', handleClick)
-  })
+  }, [])
 
   return (
     <div ref={container}>
@@ -114,6 +111,7 @@ const App = () => {
         enterPress={enterPress}
       />}
       <TagsWrapper tags={tagsArray} selectTag={selectTag} unselectTag={unselectTag} startEditTag={startEditTag} />
+      {inputValue}
     </div>
   )
 }
