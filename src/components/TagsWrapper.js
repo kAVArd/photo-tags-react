@@ -1,23 +1,31 @@
 import React from 'react'
 import Tag from './Tag'
 
-const TagsWrapper = (props) => {
+const TagsWrapper = ({
+  tags,
+  selectTag,
+  unselectTag,
+  enterPress,
+  deleteTag,
+  changeText,
+  startEditTag
+}) => {
   return (
     <div className='tags-wrapper'>
-      {props.tags.map((tag, index) => {
-        if (tag.isEditing) return null
-        return (
-          <Tag
-            key={index}
-            id={index}
-            position={tag.position}
-            selectTag={props.selectTag}
-            unselectTag={props.unselectTag}
-            startEditTag={props.startEditTag}
-            text={tag.text}
-          />
-        )
-      })}
+      {tags.map((tag, index) => (
+        <Tag
+          key={index}
+          tag={tag}
+          id={index}
+          selectTag={selectTag}
+          unselectTag={unselectTag}
+          enterPress={enterPress}
+          deleteTag={deleteTag}
+          changeText={changeText}
+          startEditTag={startEditTag}
+        />
+      )
+      )}
     </div>
   )
 }

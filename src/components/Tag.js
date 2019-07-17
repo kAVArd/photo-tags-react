@@ -1,28 +1,38 @@
-import React, { useRef, useEffect } from 'react'
+import React from 'react'
+import InputWrapper from './InputWrapper'
 
-const Tag = (props) => {
-  const tag = useRef(null)
-
-  useEffect(() => {
-    const tagCurrent = tag.current
-    tagCurrent.addEventListener('mousedown', props.selectTag)
-    tagCurrent.addEventListener('mouseup', props.unselectTag)
-    tagCurrent.addEventListener('dblclick', props.startEditTag)
-    return () => {
-      tagCurrent.removeEventListener('mousedown', props.selectTag)
-      tagCurrent.removeEventListener('mouseup', props.unselectTag)
-      tagCurrent.removeEventListener('dblclick', props.startEditTag)
-    }
-  })
-
+const Tag = ({
+  tag,
+  id,
+  selectTag,
+  unselectTag,
+  enterPress,
+  deleteTag,
+  changeText,
+  startEditTag
+}) => {
+  if (tag.isEditing) {
+    return (
+      <InputWrapper
+        enterPress={enterPress}
+        deleteTag={deleteTag}
+        changeText={changeText}
+        text={tag.text}
+        position={tag.position}
+        id={id}
+      />
+    )
+  }
   return (
     <span
-      ref={tag}
+      onMouseDown={selectTag}
+      onMouseUp={unselectTag}
+      onDoubleClick={() => startEditTag(id)}
       className='tag badge badge-secondary'
-      id={props.id}
-      style={{ left: props.position.x + 'px', top: props.position.y + 'px' }}
+      id={id}
+      style={{ left: tag.position.x + 'px', top: tag.position.y + 'px' }}
     >
-      <h6>{props.text}</h6>
+      <h6>{tag.text}</h6>
     </span>
   )
 }

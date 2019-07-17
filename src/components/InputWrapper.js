@@ -1,6 +1,13 @@
 import React, { useEffect, useRef } from 'react'
 
-const InputWrapper = ({ enterPress, deleteTag, changeValue, value, position }) => {
+const InputWrapper = ({
+  enterPress,
+  deleteTag,
+  changeText,
+  text,
+  position,
+  id
+}) => {
   const styleWrapper = {
     left: position.x + 'px',
     top: position.y + 'px'
@@ -30,8 +37,8 @@ const InputWrapper = ({ enterPress, deleteTag, changeValue, value, position }) =
         className='form-control tag-input'
         placeholder='Enter tag text'
         ref={input}
-        onChange={changeValue}
-        value={value}
+        onChange={(e) => changeText(id, e)}
+        value={text}
         autoFocus
       />
       <span className='close' ref={closeButton}>&times;</span>

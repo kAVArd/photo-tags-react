@@ -1,24 +1,18 @@
-import React, { useState, useRef, useEffect, useCallback } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import update from 'immutability-helper'
 import './style.css'
 import ImageWrapper from './components/ImageWrapper'
-import InputWrapper from './components/InputWrapper'
 import TagsWrapper from './components/TagsWrapper'
 
 const App = () => {
   const [tagsArray, setTagsArray] = useState([])
-  const [position, setPosition] = useState({ x: 0, y: 0 })
   const [drugObject, setDrugObject] = useState(null)
-  const [inputVisibility, setInputVisibility] = useState('hidden')
-  const [ inputValue, setInputValue ] = useState('')
-  const [editingIndex, setEditingIndex] = useState(null)
 
-  const changeInputValue = (e) => {
-    setInputValue(e.target.value)
+  const changeInputValue = (id, e) => {
+    setTagsArray(update(tagsArray, { [id]: { text: { $set: e.target.value } } }))
   }
 
   const selectTag = (e) => {
-    console.log(tagsArray)
     const tag = e.target.parentElement
     setDrugObject({
       index: tag.id,
@@ -30,69 +24,41 @@ const App = () => {
   }
 
   const unselectTag = function () {
-    console.log(tagsArray)
     setDrugObject(null)
   }
 
   const moveTag = (e) => {
     if (drugObject !== null) {
-      const newTagsArray = update(tagsArray, { [drugObject.index]: { position: {
+      setTagsArray(update(tagsArray, { [drugObject.index]: { position: {
         x: { $set: e.clientX - drugObject.offset.width / 2 },
         y: { $set: e.clientY - drugObject.offset.height / 2 }
-      } } })
-      setTagsArray(newTagsArray)
+      } } }))
     }
   }
 
-  const setInputDefault = () => {
-    setEditingIndex(null)
-    setInputValue('')
-    setInputVisibility('hidden')
-  }
-
-  const displayInput = (x, y) => {
-    setPosition({ x: x, y: y })
-    setInputVisibility('visible')
-  }
-
-  const startEditTag = (e) => {
-    const tagSpan = e.target.parentElement
-    setInputValue(tagSpan.textContent)
-    displayInput(tagSpan.offsetLeft, tagSpan.offsetTop)
-    setEditingIndex(tagSpan.id)
-    setTagsArray(update(tagsArray, { [tagSpan.id]: { isEditing: { $set: true } } }))
-  }
-
-  const deleteTag = (e) => {
-    e.stopPropagation()
-    if (editingIndex !== null) {
-      setTagsArray(update(tagsArray, { $splice: [[editingIndex, 1]] }))
-    }
-    setInputDefault()
-  }
-
-  const handleClick = useCallback((e) => {
-    if (e && e.target.className === 'image' && inputVisibility === 'hidden') {
-      displayInput(e.clientX - 85, e.clientY - 19)
+  const handleClick = (e) => {
+    if (e && e.target.className === 'image') {
+      setTagsArray(update(tagsArray, { $push: [{
+        text: '',
+        position: {
+          x: e.clientX - 85,
+          y: e.clientY - 19
+        },
+        isEditing: true
+      }] }))
     }
 
-    if (inputValue === '') {
-      return
-    }
-
-    if (editingIndex !== null) {
-      setTagsArray(update(tagsArray, { [editingIndex]: {
-        isEditing: { $set: false },
-        text: { $set: inputValue }
-      } }))
-    } else setTagsArray([...tagsArray, { text: inputValue, position: position, isEditing: false }])
-
-    setInputDefault()
-  }, [inputVisibility, inputValue, editingIndex, tagsArray, position])
-
-  const enterPress = (e) => {
-    if (e.which === 13) handleClick()
+    tagsArray.forEach((tag, index) => {
+      if (tag.text === '') setTagsArray(update(tagsArray, { $splice: [[index, 1]] }))
+      else if (tag.isEditing) setTagsArray(update(tagsArray, { [index]: { isEditing: { $set: false } } }))
+    })
   }
+
+  const startEditTag = (id) => {
+    setTagsArray(update(tagsArray, { [id]: { isEditing: { $set: true } } }))
+  }
+
+  const enterPress = () => console.log('enterPress')
 
   const container = useRef()
 
@@ -102,19 +68,22 @@ const App = () => {
     return () => {
       containerCurrent.removeEventListener('click', handleClick)
     }
-  }, [handleClick])
+  })
+
+  const deleteTag = () => console.log('deleteTag')
 
   return (
     <div ref={container}>
       <ImageWrapper moveTag={moveTag} />
-      {inputVisibility === 'visible' && <InputWrapper
-        position={position}
-        changeValue={changeInputValue}
-        value={inputValue}
-        deleteTag={deleteTag}
+      <TagsWrapper
+        tags={tagsArray}
+        selectTag={selectTag}
+        unselectTag={unselectTag}
         enterPress={enterPress}
-      />}
-      <TagsWrapper tags={tagsArray} selectTag={selectTag} unselectTag={unselectTag} startEditTag={startEditTag} />
+        deleteTag={deleteTag}
+        changeText={changeInputValue}
+        startEditTag={startEditTag}
+      />
     </div>
   )
 }
