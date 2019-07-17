@@ -74,8 +74,12 @@ const App = () => {
 
     if (inputValue === '') return
 
-    if (editingIndex !== null) setTagsArray(update(tagsArray, { [editingIndex]: { isEditing: { $set: false } } }))
-    else setTagsArray([...tagsArray, { text: inputValue, position: position, isEditing: false }])
+    if (editingIndex !== null) {
+      setTagsArray(update(tagsArray, { [editingIndex]: {
+        isEditing: { $set: false },
+        text: { $set: inputValue }
+      } }))
+    } else setTagsArray([...tagsArray, { text: inputValue, position: position, isEditing: false }])
 
     setInputDefault()
   }

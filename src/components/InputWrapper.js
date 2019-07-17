@@ -20,7 +20,7 @@ const InputWrapper = (props) => {
       inputCurrent.removeEventListener('change', props.changeValue)
       closeButtonCurrent.removeEventListener('click', props.deleteTag)
     }
-  })
+  }, [])
 
   return (
     <div className='input-wrapper' style={styleWrapper}>
